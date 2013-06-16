@@ -33,7 +33,21 @@ Creating a more complex nested document:
 {"foo": {"foo": "bar", "bar": "baz"}}
 ```
 
-For data that looks like it might be a certain type, ``jgen`` will automatically coerce the data:
+Working with arrays:
+
+```bash
+[jcmcken@localhost] jgen foo.bar=a,b,c
+{"foo": {"bar": ["a", "b", "c"]}}
+```
+
+Use non-strinrg data types (see section below for details):
+
+```bash
+[jcmcken@localhost] jgen foo=true bar=null baz=3.141
+{"baz": 3.141, "foo": true, "bar": null}
+```
+
+A complex example:
 
 ```bash
 [jcmcken@localhost] jgen foo=true bar=null baz=3.141
