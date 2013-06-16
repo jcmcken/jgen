@@ -47,13 +47,6 @@ Use non-strinrg data types (see section below for details):
 {"baz": 3.141, "foo": true, "bar": null}
 ```
 
-A complex example:
-
-```bash
-[jcmcken@localhost] jgen foo=true bar=null baz=3.141
-{"baz": 3.141, "foo": true, "bar": null}
-```
-
 ## Data Types
 
 Currently, ``jgen`` does the following type conversions on data values (but **not** keys!):
