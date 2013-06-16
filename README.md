@@ -47,6 +47,13 @@ Use non-strinrg data types (see section below for details):
 {"baz": 3.141, "foo": true, "bar": null}
 ```
 
+## Command-line Options
+
+Some additional command-line options exist for ``jgen``.
+
+* ``-p``/``--pretty-print`` : "Pretty-print" the resulting document
+* ``-y``/``--yaml`` : If **PyYAML** library is available, print the document as YAML instead of JSON
+
 ## Data Types
 
 Currently, ``jgen`` does the following type conversions on data values (but **not** keys!):
