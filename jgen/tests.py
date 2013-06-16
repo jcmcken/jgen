@@ -14,15 +14,13 @@ VALID = (
   # Overrides
   ('test_override', 'a.a=b a=c', {"a":"c"}),
   # Nested
-  ('test_nested_string', "a.a=b a.b=b", {"a": {"a":"b", "b":"c"}}),
-  ('test_nested_multi_type', "a.a=true a.b=1.0 a.c=null", {"a": {"a":True, "b":1.0, "c":None}}),
+  ('test_nested_string', "a.a=b a.b=b", {"a": {"a":"b", "b":"b"}}),
+  ('test_nested_multi_type', "a.a=true a.b=1.2 a.c=null", {"a": {"a":True, "b":1.2, "c":None}}),
   ('test_nested_list', "a.a=1,2,3", {"a":{"a":[1,2,3]}}),
   # Weird Ones
+  ('test_inty_float', 'foo=1.0', {"foo": 1.0}),
   ('test_typey_key', "true=a", {"true": "a"}), # JSON spec does not allow non-string keys  
-  ('test_blank_key', "=a", {"": "a"}), # not sure why you would do this..
   ('test_blank_value', "a=", {"a": ""}),
-  ('test_ridiculous_key_empty', "==", {"=": ""}),   # stop it.
-  ('test_ridiculous_key_value', "===", {"=": "="}), # ..sigh.. if you must.
   ('test_stupidity', '\\=\\', {'\\': '\\'}), # oh come on!
 )
 
@@ -38,10 +36,23 @@ class TestAllTheThings(unittest.TestCase):
             return
         raise
 
-for testname, querystring, document in VALID:
+    def test_invalid_key_val(self):
+        try:
+            self.parser.parse(["=="])
+        except InvalidFormat, e:
+            assert "key value cannot be '='" in e.args[0]
+            return
+        raise
+
+def generate_test(testname, querystring, document):
     def test(cls):
-        cls.assertTrue(cls.parser.parse(querystring.split()) == document)
-    setattr(test, '__name__', testname)
+        parsed = cls.parser.parse(querystring.split())
+        assert parsed == document, "'%s' is '%s', not '%s'" % (querystring, parsed, document)
+    test.__name__ = testname
+    return test
+
+for testname, querystring, document in VALID:
+    test = generate_test(testname, querystring, document)
     setattr(TestAllTheThings, testname, test)
 
 if __name__ == '__main__':

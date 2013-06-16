@@ -86,6 +86,8 @@ class Parser(object):
         return document
 
     def split(self, part):
+        if part.startswith('='):
+            raise InvalidFormat("key value cannot be '='")
         return part.split('=', 1)
 
     def create_nested_hash(self, key, value):
@@ -146,6 +148,8 @@ class Parser(object):
         try:
             # strip insignificant 0's prior to casting
             real_value = value.rstrip("0")
+            if real_value.endswith('.'):
+                real_value += '0'
             coerced = float(real_value)
             if str(coerced) == real_value:
                 result = coerced
@@ -168,6 +172,8 @@ class Parser(object):
     def parse_part(self, part):
         try:
             key, val = self.split(part)
+        except InvalidFormat, e:
+            raise e
         except ValueError:
             raise InvalidFormat("'%s' must be in the format KEY=VALUE" % part)
         converted_val = self.convert_value_part(val) 
