@@ -115,7 +115,10 @@ class Parser(object):
         return result
 
     def parse_part(self, part):
-        key, val = self.split(part)
+        try:
+            key, val = self.split(part)
+        except ValueError:
+            raise InvalidFormat("'%s' must be in the format KEY=VALUE" % part)
         converted_val = self.convert_value_part(val) 
         return self.create_nested_hash(key, converted_val)
 
@@ -131,7 +134,10 @@ def main(argv=None):
     opts, args = cli.parse_args(argv)
 
     parser = Parser()
-    result = parser.parse(args) 
+    try:
+        result = parser.parse(args) 
+    except InvalidFormat, e:
+        cli.error(e.args[0])
     sys.stdout.write(serialize(result, pretty=opts.pretty_print) + "\n")
 
 if __name__ == '__main__':
