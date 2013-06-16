@@ -15,35 +15,35 @@ Without any inputs, ``jgen`` generates a blank JSON document:
 Creating a simple document:
 
 ```bash
-[jcmcken@localhost] jgen foo=bar
+[jcmcken@localhost]$ jgen foo=bar
 {"foo": "bar"}
 ```
 
 Creating a nested document:
 
 ```bash
-[jcmcken@localhost] jgen foo.bar=baz
+[jcmcken@localhost]$ jgen foo.bar=baz
 {"foo": {"bar": "baz"}}
 ```
 
 Creating a more complex nested document:
 
 ```bash
-[jcmcken@localhost] jgen foo.bar=baz foo.foo=bar
+[jcmcken@localhost]$ jgen foo.bar=baz foo.foo=bar
 {"foo": {"foo": "bar", "bar": "baz"}}
 ```
 
 Working with arrays:
 
 ```bash
-[jcmcken@localhost] jgen foo.bar=a,b,c
+[jcmcken@localhost]$ jgen foo.bar=a,b,c
 {"foo": {"bar": ["a", "b", "c"]}}
 ```
 
 Use non-strinrg data types (see section below for details):
 
 ```bash
-[jcmcken@localhost] jgen foo=true bar=null baz=3.141
+[jcmcken@localhost]$ jgen foo=true bar=null baz=3.141
 {"baz": 3.141, "foo": true, "bar": null}
 ```
 
@@ -77,7 +77,3 @@ For example, if the input string is ``foo.bar=baz foo=baz``, ``jgen`` will take 
 the document ``{"foo": {"bar": "baz"}}``. Next it will take the string ``foo=baz`` and generate the document
 ``{"foo": "baz"}``. Since the recursive merge of these two documents is ``{"foo": "baz"}``, some of the data
 you specified at the command line is lost.
-
-
-
-
