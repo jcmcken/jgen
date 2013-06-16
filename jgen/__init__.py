@@ -36,11 +36,7 @@ class Parser(object):
         return document
 
     def split(self, part):
-        try:
-            key, val = part.split('=')
-        except ValueError:
-            raise InvalidFormat("the query '%s' must be of the format KEY=VAL" % part)
-        return key, val
+        return part.split('=', 1)
 
     def create_hash(self, hash_part, value):
         parts = hash_part.split('.')
