@@ -47,7 +47,24 @@ Use non-strinrg data types (see section below for details):
 {"baz": 3.141, "foo": true, "bar": null}
 ```
 
-## Data Types
+Using sub-documents to create more complex structures (see section below for details on precedence):
+
+```bash
+[jcmcken@localhost] jgen foo="foo.bar=baz,foo.baz=bar,true"
+{"foo": [{"foo": {"bar": "baz"}}, {"foo": {"baz": "bar"}}, true]}
+```
+
+## Argument Precedence
+
+When submitting data to ``jgen``, certain structures have precedence over others. When encountering a particular
+data string, ``jgen`` uses the following precedence ordering:
+
+1. Parse sub-documents
+2. Parse arrays
+3. Parse hashes
+4. Parse bare values 
+
+## Data Type Conversion
 
 Currently, ``jgen`` does the following type conversions on data values (but **not** keys!):
 
