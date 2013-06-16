@@ -104,13 +104,10 @@ class Parser(object):
 
     def convert_value_part(self, part, coerce_types=True):
         # TODO allow escaped commas
-        if " " in part:
-            result = self.parse(part.split())
-        elif "," in part:
+        if "," in part:
             result = part.split(",")
-            result = map(lambda x: self.convert_value_part(x, coerce_types), result)
-        elif '=' in part:
-            result = self.parse_part(part)
+            if coerce_types:
+                result = map(self.coerce, result)
         else:
             result = part
             if coerce_types:
