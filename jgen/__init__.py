@@ -26,6 +26,7 @@ def dict_recursive_merge(a, b):
 
 def get_cli():
     cli = optparse.OptionParser()
+    cli.add_option('-p', '--pretty-print', action='store_true')
     return cli
 
 class Parser(object):
@@ -118,8 +119,12 @@ class Parser(object):
         converted_val = self.convert_value_part(val) 
         return self.create_nested_hash(key, converted_val)
 
-def serialize(obj):
-    return json.dumps(obj)
+def serialize(obj, pretty=False):
+    if pretty:
+        kwargs = {"indent":2}
+    else:
+        kwargs = {}
+    return json.dumps(obj, **kwargs)
 
 def main(argv=None):
     cli = get_cli()
@@ -127,7 +132,7 @@ def main(argv=None):
 
     parser = Parser()
     result = parser.parse(args) 
-    sys.stdout.write(serialize(result) + "\n")
+    sys.stdout.write(serialize(result, pretty=opts.pretty_print) + "\n")
 
 if __name__ == '__main__':
     main()
