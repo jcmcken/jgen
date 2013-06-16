@@ -40,6 +40,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{python_sitelib}/*
 %attr(0755,root,root) %{_bindir}/jgen
+%doc README.md CHANGELOG.md LICENSE VERSION
 
 %changelog
 * Sun Jun 16 2013 Jon McKenzie - 0.1.0
