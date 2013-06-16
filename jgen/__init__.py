@@ -38,8 +38,8 @@ class Parser(object):
     def split(self, part):
         return part.split('=', 1)
 
-    def create_hash(self, hash_part, value):
-        parts = hash_part.split('.')
+    def create_nested_hash(self, key, value):
+        parts = key.split('.')
         document = {}
         current_level = document
         levels = len(parts)
@@ -64,7 +64,7 @@ class Parser(object):
     def parse_part(self, part):
         key, val = self.split(part)
         converted_val = self.convert_value(val) 
-        return self.create_hash(key, converted_val)
+        return self.create_nested_hash(key, converted_val)
 
 def serialize(obj):
     return json.dumps(obj)
