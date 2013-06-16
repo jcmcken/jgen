@@ -52,18 +52,25 @@ class Parser(object):
             current_level = current_level[part]
         return document
 
-    def convert_value(self, part, coerce_types=True):
+    def coerce(self, value):
+        return str(value)
+
+    def convert_value_part(self, part, coerce_types=True):
         # TODO allow escaped commas
         # TODO coerce data types
         if "," in part:
             result = part.split(",")
+            if coerce_types:
+                result = map(self.coerce, result)
         else:
-            result = str(part)
+            result = part
+            if coerce_types:
+                result = self.coerce(result)
         return result
 
     def parse_part(self, part):
         key, val = self.split(part)
-        converted_val = self.convert_value(val) 
+        converted_val = self.convert_value_part(val) 
         return self.create_nested_hash(key, converted_val)
 
 def serialize(obj):
