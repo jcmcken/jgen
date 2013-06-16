@@ -53,11 +53,56 @@ class Parser(object):
         return document
 
     def coerce(self, value):
-        return str(value)
+        result = value
+        for coercer_func in self._coercer_funcs:
+            coerced = coercer_func(value)
+            if coerced is not value:
+                result = coerced
+                break
+        return result
+
+    @property
+    def _coercer_funcs(self):
+        return [self._coerce_null, self._coerce_bool, self._coerce_int, self._coerce_float]
+
+    def _coerce_null(self, value, nulls=['null']):
+        result = value
+        if value in nulls:
+            result = None
+        return result
+
+    def _coerce_bool(self, value, trues=["true"], falses=["false"]):
+        result = value 
+        if result in trues:
+            result = True
+        elif result in falses:
+            result = False
+        return result
+
+    def _coerce_int(self, value):
+        result = value
+        try:
+            coerced = int(value)
+            if str(coerced) == value:
+                result = coerced
+        except ValueError:
+            pass
+        return result
+
+    def _coerce_float(self, value):
+        result = value
+        try:
+            # strip insignificant 0's prior to casting
+            real_value = value.rstrip("0")
+            coerced = float(real_value)
+            if str(coerced) == real_value:
+                result = coerced
+        except ValueError:
+            pass
+        return result
 
     def convert_value_part(self, part, coerce_types=True):
         # TODO allow escaped commas
-        # TODO coerce data types
         if "," in part:
             result = part.split(",")
             if coerce_types:
