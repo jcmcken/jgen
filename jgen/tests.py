@@ -36,7 +36,7 @@ class TestAllTheThings(unittest.TestCase):
             return
         raise
 
-    def test_invalid_key_val(self):
+    def test_invalid_key(self):
         try:
             self.parser.parse(["=="])
         except InvalidFormat, e:
