@@ -20,6 +20,9 @@ BuildRequires:  python-devel
 # requires buildsys-build package to populate RPM macro
 %{?el5:Requires: python-simplejson}
 
+# Since YAML support is optional, don't require it by default
+%{?require_yaml:Requires: PyYAML}
+
 %description
 Generate simple JSON documents from the command line.
 
