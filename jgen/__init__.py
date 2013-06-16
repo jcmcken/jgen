@@ -1,13 +1,50 @@
-try:
-    import json
-except ImportError:
-    import simplejson as json
 
 import sys
 import optparse
 from copy import deepcopy
 
 class InvalidFormat(ValueError): pass
+
+def _load_lib(candidates):
+    loaded = None
+    for lib in candidates:
+        try:
+            loaded = __import__(lib)
+            break
+        except ImportError:
+            pass
+    return loaded
+
+def _load_json_serializer():
+    lib = _load_lib(['json', 'simplejson'])
+    serializer = None
+    if lib:
+        def serializer(obj, pretty=False):
+            if pretty:
+                kwargs = {"indent":2}
+            else:
+                kwargs = {}
+            return lib.dumps(obj, **kwargs)
+    return serializer
+
+def _load_yaml_serializer():
+    lib = _load_lib(['yaml'])
+    serializer = None
+    if lib:
+        def serializer(obj, pretty=False):
+            if pretty:
+                kwargs = {"default_flow_style": False}
+            else:
+                kwargs = {}
+            return "---\n" + lib.dump(obj, **kwargs).strip()
+    return serializer
+
+_SERIALIZERS = {
+  'json': _load_json_serializer(),
+  'yaml': _load_yaml_serializer(),
+}
+
+DEFAULT_SERIALIZER = _SERIALIZERS.get('json')
 
 # http://www.xormedia.com/recursively-merge-dictionaries-in-python/
 def dict_recursive_merge(a, b):
@@ -26,7 +63,11 @@ def dict_recursive_merge(a, b):
 
 def get_cli():
     cli = optparse.OptionParser()
-    cli.add_option('-p', '--pretty-print', action='store_true')
+    cli.add_option('-p', '--pretty-print', action='store_true',
+        help='Pretty-print the resulting document')
+    if _SERIALIZERS.get('yaml'):
+        cli.add_option('-y', '--yaml', action='store_true',
+            help='Print a YAML document instead of JSON')
     return cli
 
 class Parser(object):
@@ -122,13 +163,6 @@ class Parser(object):
         converted_val = self.convert_value_part(val) 
         return self.create_nested_hash(key, converted_val)
 
-def serialize(obj, pretty=False):
-    if pretty:
-        kwargs = {"indent":2}
-    else:
-        kwargs = {}
-    return json.dumps(obj, **kwargs)
-
 def main(argv=None):
     cli = get_cli()
     opts, args = cli.parse_args(argv)
@@ -138,6 +172,11 @@ def main(argv=None):
         result = parser.parse(args) 
     except InvalidFormat, e:
         cli.error(e.args[0])
+
+    serialize = DEFAULT_SERIALIZER
+    if getattr(opts, 'yaml', None):
+        serialize = _SERIALIZERS.get('yaml')
+
     sys.stdout.write(serialize(result, pretty=opts.pretty_print) + "\n")
 
 if __name__ == '__main__':
