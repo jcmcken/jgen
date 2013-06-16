@@ -62,7 +62,10 @@ def dict_recursive_merge(a, b):
     return result
 
 def get_cli():
-    cli = optparse.OptionParser()
+    cli = optparse.OptionParser(
+      usage = "usage: jgen [options] [arguments]",
+      description = "Generate simple JSON documents from the command line.",
+    )
     cli.add_option('-p', '--pretty-print', action='store_true',
         help='Pretty-print the resulting document')
     if _SERIALIZERS.get('yaml'):
