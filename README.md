@@ -42,7 +42,7 @@ For data that looks like it might be a certain type, ``jgen`` will automatically
 
 ## Data Types
 
-Currently, ``jgen`` does the following type conversions:
+Currently, ``jgen`` does the following type conversions on data values (but **not** keys!):
 
 * If a value is either of the strings ``"true"`` or ``"false"``, the resulting value will be the boolean 
   ``true`` or ``false`` (respectively).
@@ -51,6 +51,8 @@ Currently, ``jgen`` does the following type conversions:
   the ``int`` function will be applied to the value.
 * If a value is "float-like" (that is if the mapping ``lambda x: str(float(x.rstrip("0")))`` is the identity
   mapping), the ``float`` function will be applied to the value.
+
+Note that the JSON specification does **not** allow data keys to be anything except the string type.
 
 ## Data Merging
 
