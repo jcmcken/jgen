@@ -53,6 +53,7 @@ Some additional command-line options exist for ``jgen``.
 
 * ``-p``/``--pretty-print`` : "Pretty-print" the resulting document
 * ``-y``/``--yaml`` : If **PyYAML** library is available, print the document as YAML instead of JSON
+* ``--prefix`` : Prepend a prefix to each top-level key in the resulting data
 
 ## Data Types
 
