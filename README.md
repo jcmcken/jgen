@@ -59,7 +59,7 @@ how you specify the data.
 
 For example, if the input string is ``foo.bar=baz foo=baz``, ``jgen`` will take ``foo.bar=baz`` and generate
 the document ``{"foo": {"bar": "baz"}}``. Next it will take the string ``foo=baz`` and generate the document
-``{"foo": "baz"}``. Since the recursive merge of these two documents is ``{"foo": "baz"}}``, some of the data
+``{"foo": "baz"}``. Since the recursive merge of these two documents is ``{"foo": "baz"}``, some of the data
 you specified at the command line is lost.
 
 
