@@ -71,9 +71,14 @@ def get_cli():
     if _SERIALIZERS.get('yaml'):
         cli.add_option('-y', '--yaml', action='store_true',
             help='Print a YAML document instead of JSON')
+    cli.add_option('--prefix',
+        help='Prefix each top-level key with PREFIX')
     return cli
 
 class Parser(object):
+    def __init__(self, key_prefix=None):
+        self.key_prefix = key_prefix
+
     def parse(self, parts):
         document = {}
         for part in parts:
@@ -89,6 +94,8 @@ class Parser(object):
         current_level = document
         levels = len(parts)
         for index, part in enumerate(parts):
+            if index == 0 and self.key_prefix:
+                part = self.key_prefix + part
             if part not in current_level:
                 if index != ( levels - 1 ):
                     current_level[part] = {}
@@ -170,7 +177,7 @@ def main(argv=None):
     cli = get_cli()
     opts, args = cli.parse_args(argv)
 
-    parser = Parser()
+    parser = Parser(key_prefix=opts.prefix)
     try:
         result = parser.parse(args) 
     except InvalidFormat, e:
@@ -184,3 +191,4 @@ def main(argv=None):
 
 if __name__ == '__main__':
     main()
+
