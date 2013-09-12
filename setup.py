@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
   name='jgen',
@@ -7,8 +7,6 @@ setup(
   author='Jon McKenzie',
   license='BSD',
   url='https://github.com/jcmcken/jgen',
-  packages=find_packages(),
-  entry_points={
-    'console_scripts': ['jgen = jgen:main']
-  }
+  packages=["jgen"],
+  scripts=["bin/jgen"],
 )
