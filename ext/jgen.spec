@@ -3,7 +3,7 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           jgen
-Version:        0.1.1
+Version:        0.2.0
 Release:        1%{?dist}
 Summary:        Generate simple JSON documents from the command line
 
@@ -46,6 +46,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md CHANGELOG.md LICENSE VERSION
 
 %changelog
+* Wed Sep 11 2013 Jon McKenzie - 0.2.0
+- Bump release to 0.2.0
 * Wed Sep 11 2013 Jon McKenzie - 0.1.1
 - Bump release to 0.1.1
 * Sun Jun 16 2013 Jon McKenzie - 0.1.0

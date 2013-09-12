@@ -73,11 +73,14 @@ def get_cli():
             help='Print a YAML document instead of JSON')
     cli.add_option('--prefix',
         help='Prefix each top-level key with PREFIX')
+    cli.add_option('-s', '--stringify', action='store_true',
+            help='No type conversions. Treat all data as strings.')
     return cli
 
 class Parser(object):
-    def __init__(self, key_prefix=None):
+    def __init__(self, key_prefix=None, coerce_types=True):
         self.key_prefix = key_prefix
+	self.coerce_types = coerce_types
 
     def parse(self, parts):
         document = {}
@@ -157,15 +160,15 @@ class Parser(object):
             pass
         return result
 
-    def convert_value_part(self, part, coerce_types=True):
+    def convert_value_part(self, part):
         # TODO allow escaped commas
         if "," in part:
             result = part.split(",")
-            if coerce_types:
+            if self.coerce_types:
                 result = map(self.coerce, result)
         else:
             result = part
-            if coerce_types:
+            if self.coerce_types:
                 result = self.coerce(result)
         return result
 
@@ -183,7 +186,7 @@ def main(argv=None):
     cli = get_cli()
     opts, args = cli.parse_args(argv)
 
-    parser = Parser(key_prefix=opts.prefix)
+    parser = Parser(key_prefix=opts.prefix, coerce_types=not opts.stringify)
     try:
         result = parser.parse(args) 
     except InvalidFormat, e:

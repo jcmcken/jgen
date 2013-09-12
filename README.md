@@ -54,6 +54,7 @@ Some additional command-line options exist for ``jgen``.
 * ``-p``/``--pretty-print`` : "Pretty-print" the resulting document
 * ``-y``/``--yaml`` : If **PyYAML** library is available, print the document as YAML instead of JSON
 * ``--prefix`` : Prepend a prefix to each top-level key in the resulting data
+* ``-s``/``--stringify`` : Disable all type coercion (see the **Data Types** section below)
 
 ## Data Types
 
@@ -68,6 +69,8 @@ Currently, ``jgen`` does the following type conversions on data values (but **no
   mapping), the ``float`` function will be applied to the value.
 
 Note that the JSON specification does **not** allow data keys to be anything except the string type.
+
+This type coercion behavior can be disabled by passing the ``-s``/``--stringify`` command line option.
 
 ## Data Merging
 

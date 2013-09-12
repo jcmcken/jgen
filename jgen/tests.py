@@ -44,6 +44,10 @@ class TestAllTheThings(unittest.TestCase):
             return
         raise
 
+    def test_no_type_coercion(self):
+        self.parser.coerce_types = False
+	assert self.parser.parse(["foo=true"]) == {"foo":"true"}
+
 def generate_test(testname, querystring, document):
     def test(cls):
         parsed = cls.parser.parse(querystring.split())
